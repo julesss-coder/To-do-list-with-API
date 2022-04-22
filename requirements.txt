@@ -1,0 +1,33 @@
+To Do List web application that is connected to the ATDAPI service
+Goal: https://altcademy-to-do-list-api.herokuapp.com/demo 
+ATDAPI service: https://altcademy-to-do-list-api.herokuapp.com/
+My unique API key for ATDAPI service: 
+
+- [ ] You should use jQuery for this project.
+- [ ] Set up GitHub repo and push changes to GitHub.
+- [ ] Set up GitHup Page for this project once it is finished.
+
+*Minimum requirements:*
+- [ ] A list of tasks rendered in the DOM based on data from the ATDAPI server.
+- [ ] Each task has a description, a remove button, and a mark complete/active button.
+- [ ] Each task has an input element and a button that lets user add a new task.
+
+*Bonus feature:*
+- [ ] A toggle to show Active/Complete/All tasks only
+
+Fix:
+- [ ] App is very slow. Does it have to do with the event listeners being attached to the ul element, instead of the document element?
+- [ ] Bootstrap 3 for each todo item: item text col-xs-8, button should not be inside item, but sibling. !!After .row must come .col, nothing inbetween. 
+
+
+------------------------------
+
+*Pointers:*
+Start by defining basic HTML and CSS structures for your To Do List. Then move on to writing JavaScript. It will help you figure out the DOM element structures you are dynamically adding to the Document.
+
+After the document has loaded, we should make an AJAX request to get all existing tasks. The response stores the tasks in an array. Consider using a loop to dynamically add each task to the DOM.
+
+When writing event handlers for tasks, such as deleting a task, wait for the the AJAX response for deleting the task to come back as successful before removing the task from the DOM.
+
+Work on a single criterion at a time. Start with getting the list of tasks and rendering them on the DOM.
+

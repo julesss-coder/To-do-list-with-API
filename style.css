@@ -1,0 +1,66 @@
+body {
+  background-color: #f5f5f5;
+}
+
+.container {
+  /* min-width: 230px;
+  max-width: 550px; */
+  /* margin: 0 auto; */
+  background-color: white;
+  border: 1px solid lightgrey;
+}
+
+h1 {
+  text-align: center;
+}
+
+/* --- header --- */
+
+#new-todo {
+  width: 90%;
+}
+
+/* todo list */
+
+ul#todo-ul {
+  padding-left: 0;
+}
+
+li.todo-item {
+  list-style-type: none;
+}
+
+button.destroy {
+  float: right;
+}
+
+.show-todo-item.editing {
+  display: none;
+}
+
+.edit-todo-item {
+  display: none;
+}
+
+.edit-todo-item.editing {
+  display: block;
+}
+
+/* --- Footer --- */
+#footer {
+  text-align: center;
+}
+
+.todo-count {
+  float: left;
+}
+
+.filters li {
+  list-style-type: none;
+  display: inline;
+}
+
+.filters li a {
+  text-decoration: none;
+  color: black;
+}
