@@ -43,6 +43,7 @@ button.destroy {
 }
 
 .edit-todo-item.editing {
+  /* background-color: red; */
   display: block;
 }
 

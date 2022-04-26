@@ -18,6 +18,8 @@ My unique API key for ATDAPI service:
 Fix:
 - [ ] App is very slow. Does it have to do with the event listeners being attached to the ul element, instead of the document element?
 - [ ] Bootstrap 3 for each todo item: item text col-xs-8, button should not be inside item, but sibling. !!After .row must come .col, nothing inbetween. 
+- [ ] Add README.
+- [ ] Write update on Evernote.
 
 
 ------------------------------
