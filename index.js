@@ -1,30 +1,51 @@
 // My API key: {success:true,id:340}
 
 $(document).ready(function() {
+  var numberOfCompletedTodos = 0;
+  var numberOfTodos = 0;
+
   /* ============ Get todos ============== */
   var getAndDisplayAllTasks = function() {
+    
     $.ajax({
       type: 'GET',
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
       dataType: 'json',
 
       success: function (response, textStatus) {
-        // How do I check the checkbox when item is completed? Handlebars?
-        console.log('response of GET request: ', response);
+        console.log('response of GET request in getAndDisplayAllTodos: ', response);
+        numberOfTodos = 0;
+        numberOfCompletedTodos = 0;
         // Empty todo list in DOM before displaying updated list of todos
         $('#todo-ul').empty();
         $(response.tasks).each(function(index, element) {
           var newToDo = `<li class="todo-item" data-id="${element.id}">
             <div class="show-todo-item">
-              <input class="toggle" type="checkbox">
+              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
               <label>${element.content}</label>
               <button class="destroy">Remove</button>
             </div>
-            <!-- field that displays when editing-->
             <input type="text" class="edit-todo-item">
           </li>`;
+
           // append it to ul element
-          $('#todo-ul').append(newToDo);      
+          $('#todo-ul').append(newToDo); 
+          numberOfTodos++;    
+
+          // if todo is completed, increment numberOfCompletedTodos
+          if (element.completed === true) {
+            numberOfCompletedTodos++;
+          }
+
+          // if all todos are completed, toggle-all checkbox should be checked
+          if (numberOfTodos === numberOfCompletedTodos) {
+            $('#toggle-all').prop('checked', true);
+          } else {
+            $('#toggle-all').prop('checked', false);
+          }
+          
+          console.log('numberOfTodos: ', numberOfTodos);
+          console.log('numberOfCompletedTodos: ', numberOfCompletedTodos);
         });
       },
       error: function (request, textStatus, errorMessage) {
@@ -125,7 +146,7 @@ $(document).ready(function() {
     });
   };
 
-  
+
   var editToDo = function(event) {
     $(event.target).addClass('editing');
     $(event.target).next('.edit-todo-item').addClass('editing');
@@ -170,15 +191,191 @@ $(document).ready(function() {
   });
 
   
-  //============= Mark a todo as completed/not completed ============ 
+  //============= Mark a todo as completed/active ============ 
+
+  var markAsCompleted = function(idToToggle) {
+    $.ajax({
+      type: 'PUT',
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_complete?api_key=340`, // id einfügen
+      dataType: 'json',
+      success: function(response, textStatus) {
+        // numberOfCompletedTodos++; // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
+        getAndDisplayAllTasks();
+      },
+      error: function(request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+    });
+  };
+
+  var markAsActive = function(idToToggle) {
+    $.ajax({
+      type: 'PUT',
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_active?api_key=340`, // id einfügen
+      dataType: 'json',
+      success: function(response, textStatus) {
+        // numberOfCompletedTodos--;  // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
+        getAndDisplayAllTasks();
+      },
+      error: function(request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+    });
+  };
+  
 
   // Event listener auf input.toggle: click, focusin (inkludiert focusin auch click?)
-    // get id of current element
-    // if checkbox is checked:
-      // completedPropertyToSend = false
-    // else if checkbox is not checked:
-      // completedPropertyToSend = true
+  $(document).on('focusin', '.toggle', function(event) {
+    var idToToggle = $(this).data('id');
+    if (this.checked === true) {
+      markAsActive(idToToggle)
+    } else if (this.checked === false) {
+      markAsCompleted(idToToggle);
+    }
+  });
 
 
+
+  // ========== Toggle all todos =====================
+  // Option: 
+  // var markAllCompleted = function() {
+  //   $.ajax({
+  //     type: 'GET',
+  //     url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+  //     dataType: 'json',
+
+  //     success: function (response, textStatus) {
+  //       console.log('response of GET request: ', response);
+  //       // Empty todo list in DOM before displaying updated list of todos
+  //       $('#todo-ul').empty();
+  //       $(response.tasks).each(function(index, element) {
+  //         markAsCompleted(element.id);
+  //       });    
+  //     },
+  //     error: function (request, textStatus, errorMessage) {
+  //       console.log(errorMessage);
+  //     }
+  //   });
+  // };
+
+  // WORKS! V2  without calling a separate function to mark all as completed
+
+  $('#toggle-all').click(function(event) {
+    if (numberOfTodos === numberOfCompletedTodos) {
+      // mark all as active
+      $('#todo-ul li').each(function(index, element) {
+        markAsActive($(element).data('id'));
+      });
+      // toggle all checkbox should be unchecked
+      $('#toggle-all').prop('checked', false);
+    } else {
+      // mark all as complete
+      $('#todo-ul li').each(function(index, element) {
+        markAsCompleted($(element).data('id'));
+      });
+      // toggle-all checkbox should be checked
+      $('#toggle-all').prop('checked', true);
+    }
+  });
+
+  // If click on toggle all checkbox:
+  // WORKS, V1 using a separate function to mark all as completed
+  // $('#toggle-all').click(function(event) {
+  //   // if all are completed
+  //   if (numberOfTodos === numberOfCompletedTodos) {
+  //     // markAllActive()
+  //   } else {
+  //     markAllCompleted();
+  //   }
+  // });
+  //   if all are completed:
+  //     // Make GET request and check if number of completed todos === number of todos  
+  //     make all active:
+  //       PUT request to make all active
+  //   else if all/some are active:
+  //     make all completed:
+  //       PUT request to make all completed
+
+
+
+
+  // =========== Filter all, active and completed todos ==============
+  var showCompletedTodos = function() {
+    $.ajax({
+      type: 'GET',
+      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      dataType: 'json',
+
+      success: function (response, textStatus) {
+        console.log('response of GET request: ', response);
+        // Empty todo list in DOM before displaying updated list of todos
+        $('#todo-ul').empty();
+        $(response.tasks).each(function(index, element) {
+          if (element.completed === true) {
+            var newToDo = `<li class="todo-item" data-id="${element.id}">
+            <div class="show-todo-item">
+              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+              <label>${element.content}</label>
+              <button class="destroy">Remove</button>
+            </div>
+            <input type="text" class="edit-todo-item">
+          </li>`;
+            $('#todo-ul').append(newToDo);  
+          }
+        });
+      },
+      error: function (request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+    })
+  };
+
+  var showActiveTodos = function() {
+    $.ajax({
+      type: 'GET',
+      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      dataType: 'json',
+
+      success: function (response, textStatus) {
+        console.log('response of GET request: ', response);
+        // Empty todo list in DOM before displaying updated list of todos
+        $('#todo-ul').empty();
+        $(response.tasks).each(function(index, element) {
+          if (element.completed === false) {
+            var newToDo = `<li class="todo-item" data-id="${element.id}">
+            <div class="show-todo-item">
+              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+              <label>${element.content}</label>
+              <button class="destroy">Remove</button>
+            </div>
+            <input type="text" class="edit-todo-item">
+          </li>`;
+            $('#todo-ul').append(newToDo);  
+          }
+        });
+      },
+      error: function (request, textStatus, errorMessage) {
+        console.log(errorMessage);
+      }
+    })
+  };
+  
+  // Event listener on filters in footer
+  // If change event on .filters:
+  // How do I make it accessible for keyboard users?
+  $('.filters').on('click', function(event) {
+    console.log(event.target);
+    if ($(event.target).hasClass('completed')) {
+      showCompletedTodos();
+    } else if($(event.target).hasClass('active')) {
+      showActiveTodos();
+    } else if($(event.target).hasClass('all')) {
+      getAndDisplayAllTasks();
+    }
+  });
+
+
+  // Show how many items are left
+  // change item to items when there is more than 1 active todo
 });
 

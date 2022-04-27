@@ -20,6 +20,10 @@ Fix:
 - [ ] Bootstrap 3 for each todo item: item text col-xs-8, button should not be inside item, but sibling. !!After .row must come .col, nothing inbetween. 
 - [ ] Add README.
 - [ ] Write update on Evernote.
+- [ ] New todos should be added to END of todo list!
+- [ ] Filters should be accessible, i.e. should be activated by Enter when in focus.
+-[ ] Toggle all works, but why does getAndDisplayAllTasks run so often?
+-[ ] Show how many items are left in footer
 
 
 ------------------------------
@@ -32,4 +36,19 @@ After the document has loaded, we should make an AJAX request to get all existin
 When writing event handlers for tasks, such as deleting a task, wait for the the AJAX response for deleting the task to come back as successful before removing the task from the DOM.
 
 Work on a single criterion at a time. Start with getting the list of tasks and rendering them on the DOM.
+
+
+-------------
+
+WHAT I LEARNED:
+- Template literals can be used for complete expressions like a conditional using a ternary operator. To add a conditional within a template literal in HTML, I had to wrap the `` around the whole expression, like this:
+var newToDo = `<li class="todo-item" data-id="${element.id}">
+  <div class="show-todo-item">
+    <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+    <label>${element.content}</label>
+    <button class="destroy">Remove</button>
+  </div>
+  <input type="text" class="edit-todo-item">
+</li>`;
+- Put counter variables inside ajax request so they are read every time the request runs.
 
