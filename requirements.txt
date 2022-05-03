@@ -3,19 +3,23 @@ Goal: https://altcademy-to-do-list-api.herokuapp.com/demo
 ATDAPI service: https://altcademy-to-do-list-api.herokuapp.com/
 My unique API key for ATDAPI service: 
 
-- [ ] You should use jQuery for this project.
-- [ ] Set up GitHub repo and push changes to GitHub.
+- [x] You should use jQuery for this project.
+- [x] Set up GitHub repo and push changes to GitHub.
 - [ ] Set up GitHup Page for this project once it is finished.
 
 *Minimum requirements:*
-- [ ] A list of tasks rendered in the DOM based on data from the ATDAPI server.
-- [ ] Each task has a description, a remove button, and a mark complete/active button.
-- [ ] Each task has an input element and a button that lets user add a new task.
+- [x] A list of tasks rendered in the DOM based on data from the ATDAPI server.
+- [x] Each task has a description, a remove button, and a mark complete/active button.
+- [x] Each task has an input element and a button that lets user add a new task.
 
 *Bonus feature:*
-- [ ] A toggle to show Active/Complete/All tasks only
+- [x] A toggle to show Active/Complete/All tasks only
 
 Fix:
+- Formatting: input field and todo items, checkboxes and buttons should be aligned. 
+- Formatting: When clicking the filters, the formatting of the todo items should not change!!!
+- Formatting: When clicking the filters, the active one should show visually.
+
 - [ ] App is very slow. Does it have to do with the event listeners being attached to the ul element, instead of the document element?
 - [ ] Bootstrap 3 for each todo item: item text col-xs-8, button should not be inside item, but sibling. !!After .row must come .col, nothing inbetween. 
 - [ ] Add README.
@@ -23,7 +27,10 @@ Fix:
 - [ ] New todos should be added to END of todo list!
 - [ ] Filters should be accessible, i.e. should be activated by Enter when in focus.
 -[ ] Toggle all works, but why does getAndDisplayAllTasks run so often?
--[ ] Show how many items are left in footer
+-[x] Show how many items are left in footer
+-[ ] Make design acceptable... (see todomvc)
+-[ ] Set up GitHub Page when finished.
+-[x] Toggle all checkbox should be unchecked when all todos are removed.
 
 
 ------------------------------

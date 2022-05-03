@@ -16,8 +16,12 @@ h1 {
 
 /* --- header --- */
 
+#header {
+  margin-bottom: 15px;
+}
+
 #new-todo {
-  width: 90%;
+  /* width: 95%; */
 }
 
 /* todo list */
@@ -29,6 +33,8 @@ ul#todo-ul {
 li.todo-item {
   list-style-type: none;
 }
+
+
 
 button.destroy {
   float: right;
@@ -64,4 +70,11 @@ button.destroy {
 .filters li a {
   text-decoration: none;
   color: black;
+  border: 1px solid lightslategray;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+#footer.hide-footer {
+  display: none;
 }

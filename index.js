@@ -6,6 +6,7 @@ $(document).ready(function() {
 
   /* ============ Get todos ============== */
   var getAndDisplayAllTasks = function() {
+    console.log('getAndDisplayAllTasks runs');
     
     $.ajax({
       type: 'GET',
@@ -13,19 +14,30 @@ $(document).ready(function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
+        // Why does ajax request run only AFTER getAndDisplayAllTasks has been called and the rest of the code has been parsed?
+        console.log('success method runs');
         console.log('response of GET request in getAndDisplayAllTodos: ', response);
         numberOfTodos = 0;
         numberOfCompletedTodos = 0;
         // Empty todo list in DOM before displaying updated list of todos
         $('#todo-ul').empty();
         $(response.tasks).each(function(index, element) {
-          var newToDo = `<li class="todo-item" data-id="${element.id}">
-            <div class="show-todo-item">
-              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-              <label>${element.content}</label>
-              <button class="destroy">Remove</button>
-            </div>
-            <input type="text" class="edit-todo-item">
+          // var newToDo = `<li class="todo-item" data-id="${element.id}">
+          //   <div class="show-todo-item">
+          //     <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+          //     <label>${element.content}</label>
+          //     <button class="destroy">Remove</button>
+          //   </div>
+          //   <input type="text" class="edit-todo-item">
+          // </li>`;
+
+          var newToDo = `<li class="todo-item row" data-id="${element.id}">
+              <div class="show-todo-item col-xs-12">
+                <input class="toggle col-xs-1" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+                <label class="col-xs-9">${element.content}</label>
+                <button class="destroy col-xs-1">Remove</button>
+              </div>
+              <input type="text" class="edit-todo-item col-xs-9">
           </li>`;
 
           // append it to ul element
@@ -43,16 +55,68 @@ $(document).ready(function() {
           } else {
             $('#toggle-all').prop('checked', false);
           }
+
+
+
+          // Display number of active items in footer | V2, as putting this in a separate function didn't work
+          // Is there a way to display the footer without running this code every time a todo is requested?
+          var activeTodos = numberOfTodos - numberOfCompletedTodos;
+          if (activeTodos > 1) {
+            $('#footer').removeClass('hide-footer');
+            $('.todo-count').html(`<strong>${activeTodos}</strong> items left`);
+          } else if (activeTodos === 1) {
+            $('#footer').removeClass('hide-footer');
+            $('.todo-count').html(`<strong>${activeTodos}</strong> item left`);
+          } else if (activeTodos === 0) {
+            $('#footer').addClass('hide-footer');
+          } 
           
           console.log('numberOfTodos: ', numberOfTodos);
           console.log('numberOfCompletedTodos: ', numberOfCompletedTodos);
+          console.log('active todos: ', numberOfTodos - numberOfCompletedTodos);
         });
+
+        if (numberOfTodos === 0) {
+          $('#footer').addClass('hide-footer');
+        }
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
       }
     });
   };
+
+
+
+
+  // ================ V1: Render active item counter in footer =================
+  // ==== DOES NOT WORK. renderFooter IS CALLED BEFORE getAndDisplayAllTasks RUNS THE AJAX REQUEST. THEREFORE, renderFooter SHOWS ACTIVETODOS AS 0. =========
+
+  // Q: I want to call renderFooter after all todos have been displayed - i.e. after getAndDisplayAllTasks has run. However, even though I call renderFooter after getAndDisplayAllTasks, the item counter in the footer is not shown. The number of todos/active todos / completed todos is not known. Has getAndDisplayAllTasks not been called yet?
+  // When adding a breakpoint on the calls for getAndDisplayAllTasks() and renderFooter(), 
+
+  // var showItemsLeft = function() {
+  //   console.log('showItemsLeft runs');
+  //   var activeTodos = numberOfTodos - numberOfCompletedTodos;
+  //   if (activeTodos > 1) {
+  //     $('.todo-count').html(`<strong>${activeTodos}</strong> items left`);
+  //   } else if (activeTodos === 1) {
+  //     $('.todo-count').html(`<strong>${activeTodos}</strong> item left`);
+  //   } else if (activeTodos === 0) {
+  //     // $('#footer').addClass('hide-footer');
+  //     // Where do I have to remove .hide-footer again?
+  //   }
+  // };
+
+  // // Separate function renderFooter, to be called after getAndDisplayAllTasks
+  // // render number of items left
+  // // render filters
+  // var renderFooter = function() {
+  //   console.log('renderFooter runs');
+  //   showItemsLeft();
+  // };
+
+  // renderFooter();
 
 
   /* ======== Add a todo =========== */
@@ -71,6 +135,7 @@ $(document).ready(function() {
       success: function(response, textStatus) {
         console.log('response of POST request: ', response);
         getAndDisplayAllTasks();
+        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -90,6 +155,14 @@ $(document).ready(function() {
     }
   });
 
+  // Event listener for add-todo-button
+  $('#add-todo-button').click(function(event) {
+    if ($('#new-todo').val() !== '') {
+      addTodo();
+      $('#new-todo').val('');
+    }
+  });
+
   /* ============= Remove a todo ============== */
 
   var removeToDo = function(idToRemove) {
@@ -98,6 +171,7 @@ $(document).ready(function() {
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + idToRemove + '?api_key=340',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
+        // renderFooter();
       }, 
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -110,8 +184,6 @@ $(document).ready(function() {
     var id = $(this).parent().parent().data('id');
     removeToDo(id);
   });
-
-  getAndDisplayAllTasks();
 
 
   // ================ Edit a todo ====================
@@ -139,6 +211,7 @@ $(document).ready(function() {
         });
 
         getAndDisplayAllTasks();
+        // renderFooter();
       }, 
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -201,6 +274,7 @@ $(document).ready(function() {
       success: function(response, textStatus) {
         // numberOfCompletedTodos++; // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
         getAndDisplayAllTasks();
+        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -216,6 +290,7 @@ $(document).ready(function() {
       success: function(response, textStatus) {
         // numberOfCompletedTodos--;  // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
         getAndDisplayAllTasks();
+        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -375,7 +450,12 @@ $(document).ready(function() {
   });
 
 
-  // Show how many items are left
-  // change item to items when there is more than 1 active todo
+  // Why is getAndDisplayAllTasks not run when it is called? The next three lines (console.logs) run before it is called.
+  getAndDisplayAllTasks();
+  console.log('after  getAndDisplayAllTasks(): numberOfTodos: ', numberOfTodos);
+  console.log('after getAndDisplayAllTasks(): numberOfCompletedTodos: ', numberOfCompletedTodos);
+  console.log('after  getAndDisplayAllTasks(): active todos: ', numberOfTodos - numberOfCompletedTodos);
+
+
 });
 

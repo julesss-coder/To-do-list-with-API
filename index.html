@@ -28,28 +28,30 @@
       </div>
       <div class="col-xs-12">
         <!--header-->
-        <header id="header">
+        <header id="header" class="row">
           <!--toggle all checkbox-->
-          <input type="checkbox" id="toggle-all">
+          <input type="checkbox" id="toggle-all" class="col-xs-1">
           <!--input field-->
-          <input type="text" id="new-todo" placeholder="What needs to be done?">
+          <input type="text" id="new-todo" class="col-xs-9" placeholder="What needs to be done?">
+          <button id="add-todo-button" class="col-xs-1">Add todo</button>
         </header>
       </div>
+
       <div class="col-xs-12">
       
         <!-- todo list -->
-        <section id="todo-list">
-          <ul id="todo-ul">
+        <section id="todo-list" class="row">
+          <ul id="todo-ul" class="col-xs-12">
             <!-- individual todo item, to be created with jQuery -->
-            <li class="todo-item">
+            <!-- <li class="todo-item">
               <div class="show-todo-item">
                 <input class="toggle" type="checkbox">
                 <label>Todo item</label>
                 <button class="destroy">Remove</button>
-              </div>
+              </div> -->
               <!-- field that displays when editing-->
-              <input type="text" class="edit-todo-item">
-            </li>
+              <!-- <input type="text" class="edit-todo-item">
+            </li> -->
           </ul>      
         </section>
       </div>
@@ -58,7 +60,7 @@
         <!--footer-->
         <footer id="footer">
           <span class="todo-count">
-            <strong></strong> items left
+            <!-- <strong></strong> items left -->
           </span>
           <ul class="filters">
             <li>
