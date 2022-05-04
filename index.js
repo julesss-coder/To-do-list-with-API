@@ -14,7 +14,6 @@ $(document).ready(function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
-        // Why does ajax request run only AFTER getAndDisplayAllTasks has been called and the rest of the code has been parsed?
         console.log('success method runs');
 
         numberOfTodos = 0;
@@ -76,36 +75,6 @@ $(document).ready(function() {
       }
     });
   };
-
-
-  // ================ V1: Render active item counter in footer =================
-  // ==== DOES NOT WORK. renderFooter IS CALLED BEFORE getAndDisplayAllTasks RUNS THE AJAX REQUEST. THEREFORE, renderFooter SHOWS ACTIVETODOS AS 0. =========
-
-  // Q: I want to call renderFooter after all todos have been displayed - i.e. after getAndDisplayAllTasks has run. However, even though I call renderFooter after getAndDisplayAllTasks, the item counter in the footer is not shown. The number of todos/active todos / completed todos is not known. Has getAndDisplayAllTasks not been called yet?
-  // When adding a breakpoint on the calls for getAndDisplayAllTasks() and renderFooter(), 
-
-  // var showItemsLeft = function() {
-  //   console.log('showItemsLeft runs');
-  //   var activeTodos = numberOfTodos - numberOfCompletedTodos;
-  //   if (activeTodos > 1) {
-  //     $('.todo-count').html(`<strong>${activeTodos}</strong> items left`);
-  //   } else if (activeTodos === 1) {
-  //     $('.todo-count').html(`<strong>${activeTodos}</strong> item left`);
-  //   } else if (activeTodos === 0) {
-  //     // $('#footer').addClass('hide-footer');
-  //     // Where do I have to remove .hide-footer again?
-  //   }
-  // };
-
-  // // Separate function renderFooter, to be called after getAndDisplayAllTasks
-  // // render number of items left
-  // // render filters
-  // var renderFooter = function() {
-  //   console.log('renderFooter runs');
-  //   showItemsLeft();
-  // };
-
-  // renderFooter();
 
 
   /* ======== Add a todo =========== */
@@ -176,9 +145,7 @@ $(document).ready(function() {
 
   // ================ Edit a todo ====================
  
-  var editTodo = function(editedToDo, idToEdit) { // Ist es ein Problem, dass die Parameter dieselben Namen haben wie die Argumente?
-    console.log('editedToDo: ', editedToDo);
-    console.log('idToEdit: ', idToEdit);
+  var editTodo = function(editedToDo, idToEdit) {
     $.ajax({
       type: 'PUT',
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + idToEdit + '?api_key=340',
