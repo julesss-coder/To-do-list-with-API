@@ -14,68 +14,44 @@
   <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
   <!-- JavaScript -->
   <script src="./index.js"></script>
-  <script>
-    window.addEventListener('DOMContentLoaded', function(event) {
-      console.log('Dom Content loaded from index.html');
-    });
-  </script>
 </head>
 <body>
-  <div class="container">
-    <div class="row">
-      <div class="col-xs-12">
-        <h1>todos</h1>
-      </div>
-      <div class="col-xs-12">
-        <!--header-->
-        <header id="header" class="row">
-          <!--toggle all checkbox-->
-          <input type="checkbox" id="toggle-all" class="col-xs-1">
-          <!--input field-->
-          <input type="text" id="new-todo" class="col-xs-9" placeholder="What needs to be done?">
-          <button id="add-todo-button" class="col-xs-1">Add todo</button>
-        </header>
-      </div>
 
-      <div class="col-xs-12">
-      
-        <!-- todo list -->
-        <section id="todo-list" class="row">
-          <ul id="todo-ul" class="col-xs-12">
-            <!-- individual todo item, to be created with jQuery -->
-            <!-- <li class="todo-item">
-              <div class="show-todo-item">
-                <input class="toggle" type="checkbox">
-                <label>Todo item</label>
-                <button class="destroy">Remove</button>
-              </div> -->
-              <!-- field that displays when editing-->
-              <!-- <input type="text" class="edit-todo-item">
-            </li> -->
-          </ul>      
-        </section>
-      </div>
-
-      <div class="col-xs-12">
-        <!--footer-->
-        <footer id="footer">
-          <span class="todo-count">
-            <!-- <strong></strong> items left -->
-          </span>
-          <ul class="filters">
-            <li>
-              <a class="all" href="#">All</a>
-            </li>
-            <li>
-              <a class="active" href="#">Active</a>
-            </li>
-            <li>
-              <a class="completed" href="#">Completed</a>
-            </li>
-          </ul>
-        </footer>
-      </div>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h1>todos</h1>
     </div>
   </div>
+
+  <!-- input field for todos -->
+  <header id="header" class="row">
+    <!--toggle all checkbox-->
+    <input type="checkbox" id="toggle-all" class="col-xs-1">
+    <!--input field-->
+    <input type="text" id="new-todo" class="col-xs-8" placeholder="What needs to be done?">
+    <button id="add-todo-button" class="btn btn-default col-xs-offset-1">Add todo</button>
+  </header>
+
+  <!-- todo list -->
+  <section class="row" >
+    <div id="todo-list" class="col-12">
+      <!-- 1 row per todo item-->
+    </div>
+  </section>
+
+  <!--footer-->
+  <footer id="footer" class="row">
+    <div class="col-xs-12">
+      <div id="todo-count">
+      <!-- display active items left here -->
+    </div>
+    <div id="filters">
+      <a class="all" href="#">All</a>
+      <a class="active" href="#">Active</a>
+      <a class="completed" href="#">Completed</a>
+    </div>
+  </footer>
+</div>
 </body>
 </html>

@@ -16,32 +16,31 @@ $(document).ready(function() {
       success: function (response, textStatus) {
         // Why does ajax request run only AFTER getAndDisplayAllTasks has been called and the rest of the code has been parsed?
         console.log('success method runs');
-        console.log('response of GET request in getAndDisplayAllTodos: ', response);
+
         numberOfTodos = 0;
         numberOfCompletedTodos = 0;
         // Empty todo list in DOM before displaying updated list of todos
-        $('#todo-ul').empty();
+        $('#todo-list').empty();
+
+        if (numberOfTodos === 0) {
+          $('#footer').addClass('hide-footer');
+        }
+
         $(response.tasks).each(function(index, element) {
-          // var newToDo = `<li class="todo-item" data-id="${element.id}">
-          //   <div class="show-todo-item">
-          //     <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-          //     <label>${element.content}</label>
-          //     <button class="destroy">Remove</button>
-          //   </div>
-          //   <input type="text" class="edit-todo-item">
-          // </li>`;
-
-          var newToDo = `<li class="todo-item row" data-id="${element.id}">
-              <div class="show-todo-item col-xs-12">
-                <input class="toggle col-xs-1" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+          var newToDo = 
+          `<div class="todo-item row" data-id="${element.id}">
+            <div class="col-xs-12">
+              <div class="row show-todo-item">
+                <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
                 <label class="col-xs-9">${element.content}</label>
-                <button class="destroy col-xs-1">Remove</button>
+                <button class="destroy btn btn-danger">Remove</button>
               </div>
-              <input type="text" class="edit-todo-item col-xs-9">
-          </li>`;
+              <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
+            </div>
+          </div>`;
 
-          // append it to ul element
-          $('#todo-ul').append(newToDo); 
+          // append it to todo list
+          $('#todo-list').append(newToDo); 
           numberOfTodos++;    
 
           // if todo is completed, increment numberOfCompletedTodos
@@ -56,37 +55,27 @@ $(document).ready(function() {
             $('#toggle-all').prop('checked', false);
           }
 
-
-
           // Display number of active items in footer | V2, as putting this in a separate function didn't work
           // Is there a way to display the footer without running this code every time a todo is requested?
           var activeTodos = numberOfTodos - numberOfCompletedTodos;
-          if (activeTodos > 1) {
+          if (activeTodos > 1 || activeTodos === 0) {
             $('#footer').removeClass('hide-footer');
-            $('.todo-count').html(`<strong>${activeTodos}</strong> items left`);
+            $('#todo-count').html(`<strong>${activeTodos}</strong> items left`);
           } else if (activeTodos === 1) {
             $('#footer').removeClass('hide-footer');
-            $('.todo-count').html(`<strong>${activeTodos}</strong> item left`);
-          } else if (activeTodos === 0) {
-            $('#footer').addClass('hide-footer');
+            $('#todo-count').html(`<strong>${activeTodos}</strong> item left`);
           } 
           
           console.log('numberOfTodos: ', numberOfTodos);
           console.log('numberOfCompletedTodos: ', numberOfCompletedTodos);
           console.log('active todos: ', numberOfTodos - numberOfCompletedTodos);
         });
-
-        if (numberOfTodos === 0) {
-          $('#footer').addClass('hide-footer');
-        }
       },
       error: function (request, textStatus, errorMessage) {
         console.log(errorMessage);
       }
     });
   };
-
-
 
 
   // ================ V1: Render active item counter in footer =================
@@ -135,7 +124,6 @@ $(document).ready(function() {
       success: function(response, textStatus) {
         console.log('response of POST request: ', response);
         getAndDisplayAllTasks();
-        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -163,6 +151,7 @@ $(document).ready(function() {
     }
   });
 
+
   /* ============= Remove a todo ============== */
 
   var removeToDo = function(idToRemove) {
@@ -171,7 +160,6 @@ $(document).ready(function() {
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + idToRemove + '?api_key=340',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
-        // renderFooter();
       }, 
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -179,16 +167,16 @@ $(document).ready(function() {
     });
   };
   
-  // Event listener on todo list, listening for clicks on remove buttons
-  $('#todo-ul').on('click', '.destroy', function() {
-    var id = $(this).parent().parent().data('id');
+  // Event listener on document, listening for clicks on remove buttons
+  $(document).on('click', '.destroy', function() {
+    var id = $(this).prevAll('input').data('id');
     removeToDo(id);
   });
 
 
   // ================ Edit a todo ====================
-
-  var editOnEnter = function(editedToDo, idToEdit) { // Ist es ein Problem, dass die Parameter dieselben Namen haben wie die Argumente?
+ 
+  var editTodo = function(editedToDo, idToEdit) { // Ist es ein Problem, dass die Parameter dieselben Namen haben wie die Argumente?
     console.log('editedToDo: ', editedToDo);
     console.log('idToEdit: ', idToEdit);
     $.ajax({
@@ -202,16 +190,11 @@ $(document).ready(function() {
         }
       }),
       success: function(response, textStatus) {
-        console.log(response);
-        // fetch the element with idToEdit
-        // .removeClass() and addClass() don't work with this selector. Assumption: We are not dealing with a DOM element, but with an object?
-        // var elementToEdit = $(`li[data-id|='${idToEdit}']`);
         $('.editing').each(function(index, element) {
           $(element).removeClass('editing');
         });
 
         getAndDisplayAllTasks();
-        // renderFooter();
       }, 
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -220,20 +203,19 @@ $(document).ready(function() {
   };
 
 
-  var editToDo = function(event) {
-    $(event.target).addClass('editing');
-    $(event.target).next('.edit-todo-item').addClass('editing');
-    $(event.target).next('.edit-todo-item').focus();
+  var makeTodoEditable = function(event) {
+    // Hide todo item
+    $(event.currentTarget).addClass('editing');
+    // Show edit input field and focus on it
+    $(event.currentTarget).next('.edit-todo-item').addClass('editing').focus();
     // Set initial value of edit input field to initial todo
-    $(event.target).next('.edit-todo-item').val($(event.target).find('label').text());
+    $(event.currentTarget).next('.edit-todo-item').val($(event.currentTarget).find('label').text());
   };
 
 
-  // Event listener on ul element, listening for doubleclicks on todo items
-  $('#todo-ul').on('dblclick', '.show-todo-item', function(event) {
-    console.log(this);
-    console.log(event);
-    editToDo(event);
+  // Event listener on document, listening for doubleclicks on todo items
+  $(document).on('dblclick', '.show-todo-item', function(event) {
+    makeTodoEditable(event);
   });
 
 
@@ -245,14 +227,15 @@ $(document).ready(function() {
   });
 
 
-  // Event listener on ul element, listening for keyup event on edit input field
-  $('#todo-ul').on('keyup', '.edit-todo-item', function(event) {
-    var idToEdit = $(event.target).parent().data('id');
+  // Event listener on document, listening for keyup event on edit input field
+  $(document).on('keyup', '.edit-todo-item', function(event) {
+    console.log('editkeyup event: ', event);
+    var idToEdit = $(event.target).prev().find('input').data('id');
     // if user hits Enter
     if (event.key === "Enter") { 
       if ($(event.target).val() !== '') { 
         var editedToDo = $(event.target).val();
-        editOnEnter(editedToDo, idToEdit);
+        editTodo(editedToDo, idToEdit);
         $(event.target).blur();
       }
     // if user hits Escape
@@ -272,9 +255,7 @@ $(document).ready(function() {
       url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_complete?api_key=340`, // id einfügen
       dataType: 'json',
       success: function(response, textStatus) {
-        // numberOfCompletedTodos++; // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
         getAndDisplayAllTasks();
-        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -288,9 +269,7 @@ $(document).ready(function() {
       url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_active?api_key=340`, // id einfügen
       dataType: 'json',
       success: function(response, textStatus) {
-        // numberOfCompletedTodos--;  // brauche ich nicht, da in getAndDisplayAllTasks die completed Todos gezählt werden
         getAndDisplayAllTasks();
-        // renderFooter();
       },
       error: function(request, textStatus, errorMessage) {
         console.log(errorMessage);
@@ -299,79 +278,35 @@ $(document).ready(function() {
   };
   
 
-  // Event listener auf input.toggle: click, focusin (inkludiert focusin auch click?)
-  $(document).on('focusin', '.toggle', function(event) {
+  // Listen for 'change' events on item checkbox ('change' instead of 'click' event, to make checkbox accessible)
+  $(document).on('change', '.toggle', function(event) {
     var idToToggle = $(this).data('id');
+    // Check the current, changed state of checkbox:
     if (this.checked === true) {
-      markAsActive(idToToggle)
-    } else if (this.checked === false) {
       markAsCompleted(idToToggle);
+    } else if (this.checked === false) {
+      markAsActive(idToToggle)
     }
   });
 
 
 
   // ========== Toggle all todos =====================
-  // Option: 
-  // var markAllCompleted = function() {
-  //   $.ajax({
-  //     type: 'GET',
-  //     url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
-  //     dataType: 'json',
 
-  //     success: function (response, textStatus) {
-  //       console.log('response of GET request: ', response);
-  //       // Empty todo list in DOM before displaying updated list of todos
-  //       $('#todo-ul').empty();
-  //       $(response.tasks).each(function(index, element) {
-  //         markAsCompleted(element.id);
-  //       });    
-  //     },
-  //     error: function (request, textStatus, errorMessage) {
-  //       console.log(errorMessage);
-  //     }
-  //   });
-  // };
-
-  // WORKS! V2  without calling a separate function to mark all as completed
-
-  $('#toggle-all').click(function(event) {
+  // Listen for 'change' events on toggle all checkbox (not just 'click' events, to make checkbox accessible)
+  $('#toggle-all').change(function(event) {
     if (numberOfTodos === numberOfCompletedTodos) {
       // mark all as active
-      $('#todo-ul li').each(function(index, element) {
+      $('#todo-list .todo-item').each(function(index, element) {
         markAsActive($(element).data('id'));
       });
-      // toggle all checkbox should be unchecked
-      $('#toggle-all').prop('checked', false);
     } else {
       // mark all as complete
-      $('#todo-ul li').each(function(index, element) {
+      $('#todo-list .todo-item').each(function(index, element) {
         markAsCompleted($(element).data('id'));
       });
-      // toggle-all checkbox should be checked
-      $('#toggle-all').prop('checked', true);
     }
   });
-
-  // If click on toggle all checkbox:
-  // WORKS, V1 using a separate function to mark all as completed
-  // $('#toggle-all').click(function(event) {
-  //   // if all are completed
-  //   if (numberOfTodos === numberOfCompletedTodos) {
-  //     // markAllActive()
-  //   } else {
-  //     markAllCompleted();
-  //   }
-  // });
-  //   if all are completed:
-  //     // Make GET request and check if number of completed todos === number of todos  
-  //     make all active:
-  //       PUT request to make all active
-  //   else if all/some are active:
-  //     make all completed:
-  //       PUT request to make all completed
-
-
 
 
   // =========== Filter all, active and completed todos ==============
@@ -382,20 +317,23 @@ $(document).ready(function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
-        console.log('response of GET request: ', response);
         // Empty todo list in DOM before displaying updated list of todos
-        $('#todo-ul').empty();
+        $('#todo-list').empty();
         $(response.tasks).each(function(index, element) {
           if (element.completed === true) {
-            var newToDo = `<li class="todo-item" data-id="${element.id}">
-            <div class="show-todo-item">
-              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-              <label>${element.content}</label>
-              <button class="destroy">Remove</button>
-            </div>
-            <input type="text" class="edit-todo-item">
-          </li>`;
-            $('#todo-ul').append(newToDo);  
+            var newToDo = 
+            `<div class="todo-item row" data-id="${element.id}">
+              <div class="col-xs-12">
+                <div class="row show-todo-item">
+                  <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+                  <label class="col-xs-9">${element.content}</label>
+                  <button class="destroy col-xs-2">Remove</button>
+                </div>
+                <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
+              </div>
+            </div>`;
+
+            $('#todo-list').append(newToDo);  
           }
         });
       },
@@ -412,20 +350,23 @@ $(document).ready(function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
-        console.log('response of GET request: ', response);
         // Empty todo list in DOM before displaying updated list of todos
-        $('#todo-ul').empty();
+        $('#todo-list').empty();
         $(response.tasks).each(function(index, element) {
           if (element.completed === false) {
-            var newToDo = `<li class="todo-item" data-id="${element.id}">
-            <div class="show-todo-item">
-              <input class="toggle" type="checkbox" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-              <label>${element.content}</label>
-              <button class="destroy">Remove</button>
-            </div>
-            <input type="text" class="edit-todo-item">
-          </li>`;
-            $('#todo-ul').append(newToDo);  
+            var newToDo = 
+            `<div class="todo-item row" data-id="${element.id}">
+              <div class="col-xs-12">
+                <div class="row show-todo-item">
+                  <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
+                  <label class="col-xs-9">${element.content}</label>
+                  <button class="destroy btn btn-danger">Remove</button>
+                </div>
+                <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
+              </div>
+            </div>`;
+
+            $('#todo-list').append(newToDo);  
           }
         });
       },
@@ -435,11 +376,16 @@ $(document).ready(function() {
     })
   };
   
-  // Event listener on filters in footer
-  // If change event on .filters:
-  // How do I make it accessible for keyboard users?
-  $('.filters').on('click', function(event) {
-    console.log(event.target);
+
+  var displayFilteredTodos = function(event) {
+    // Show border around selected filter
+    $('#filters a').each(function(index, element) {
+      if($(element).hasClass('selected')) {
+        $(element).removeClass('selected');
+      }
+    });
+    $(event.target).addClass('selected');
+
     if ($(event.target).hasClass('completed')) {
       showCompletedTodos();
     } else if($(event.target).hasClass('active')) {
@@ -447,15 +393,26 @@ $(document).ready(function() {
     } else if($(event.target).hasClass('all')) {
       getAndDisplayAllTasks();
     }
+  };
+
+  // Listen for click events on filters in footer
+  $('#filters').on('click', function(event) {
+    displayFilteredTodos(event);
+  });
+
+  // Listen for keyup events with space key in footer (for accessibility)
+  $('#filters').on('keyup', function(event) {
+    if (event.which === 32) {
+     displayFilteredTodos(event);
+    }
   });
 
 
-  // Why is getAndDisplayAllTasks not run when it is called? The next three lines (console.logs) run before it is called.
+  // Observation: When I call getAndDisplayAllTasks(), it is run only up until (and excluding) the Ajax request; then the lines after the function call (see below) are run, and THEN the Ajax request. Why?
+  // I tried to write a separate function renderFooter that would display the items left, and would be called inside the ajax request in getAndDisplayAllTasks, but that didn't work.
   getAndDisplayAllTasks();
   console.log('after  getAndDisplayAllTasks(): numberOfTodos: ', numberOfTodos);
   console.log('after getAndDisplayAllTasks(): numberOfCompletedTodos: ', numberOfCompletedTodos);
   console.log('after  getAndDisplayAllTasks(): active todos: ', numberOfTodos - numberOfCompletedTodos);
-
-
 });
 

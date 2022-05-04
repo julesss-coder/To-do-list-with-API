@@ -15,21 +15,14 @@ My unique API key for ATDAPI service:
 *Bonus feature:*
 - [x] A toggle to show Active/Complete/All tasks only
 
-Fix:
-- Formatting: input field and todo items, checkboxes and buttons should be aligned. 
-- Formatting: When clicking the filters, the formatting of the todo items should not change!!!
-- Formatting: When clicking the filters, the active one should show visually.
-
 - [ ] App is very slow. Does it have to do with the event listeners being attached to the ul element, instead of the document element?
-- [ ] Bootstrap 3 for each todo item: item text col-xs-8, button should not be inside item, but sibling. !!After .row must come .col, nothing inbetween. 
+
 - [ ] Add README.
-- [ ] Write update on Evernote.
-- [ ] New todos should be added to END of todo list!
-- [ ] Filters should be accessible, i.e. should be activated by Enter when in focus.
--[ ] Toggle all works, but why does getAndDisplayAllTasks run so often?
+- [ ] Fix accessibility for all event listeners.
+- [ ] Fix BS cols for xs devices - items and buttons should still be in the same row.
+- [ ] Add background image.
+- [ ] Add project to portfolio.
 -[x] Show how many items are left in footer
--[ ] Make design acceptable... (see todomvc)
--[ ] Set up GitHub Page when finished.
 -[x] Toggle all checkbox should be unchecked when all todos are removed.
 
 
