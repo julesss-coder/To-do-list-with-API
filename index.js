@@ -5,17 +5,13 @@ $(document).ready(function() {
   var numberOfTodos = 0;
 
   /* ============ Get todos ============== */
-  var getAndDisplayAllTasks = function() {
-    console.log('getAndDisplayAllTasks runs');
-    
+  var getAndDisplayAllTasks = function() {    
     $.ajax({
       type: 'GET',
       url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
       dataType: 'json',
 
       success: function (response, textStatus) {
-        console.log('success method runs');
-
         numberOfTodos = 0;
         numberOfCompletedTodos = 0;
         // Empty todo list in DOM before displaying updated list of todos
@@ -54,8 +50,7 @@ $(document).ready(function() {
             $('#toggle-all').prop('checked', false);
           }
 
-          // Display number of active items in footer | V2, as putting this in a separate function didn't work
-          // Is there a way to display the footer without running this code every time a todo is requested?
+          // Display number of active items in footer 
           var activeTodos = numberOfTodos - numberOfCompletedTodos;
           if (activeTodos > 1 || activeTodos === 0) {
             $('#footer').removeClass('hide-footer');
@@ -64,10 +59,6 @@ $(document).ready(function() {
             $('#footer').removeClass('hide-footer');
             $('#todo-count').html(`<strong>${activeTodos}</strong> item left`);
           } 
-          
-          console.log('numberOfTodos: ', numberOfTodos);
-          console.log('numberOfCompletedTodos: ', numberOfCompletedTodos);
-          console.log('active todos: ', numberOfTodos - numberOfCompletedTodos);
         });
       },
       error: function (request, textStatus, errorMessage) {
@@ -219,7 +210,7 @@ $(document).ready(function() {
   var markAsCompleted = function(idToToggle) {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_complete?api_key=340`, // id einfügen
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_complete?api_key=340`,
       dataType: 'json',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
@@ -233,7 +224,7 @@ $(document).ready(function() {
   var markAsActive = function(idToToggle) {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_active?api_key=340`, // id einfügen
+      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_active?api_key=340`, 
       dataType: 'json',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
@@ -374,12 +365,6 @@ $(document).ready(function() {
     }
   });
 
-
-  // Observation: When I call getAndDisplayAllTasks(), it is run only up until (and excluding) the Ajax request; then the lines after the function call (see below) are run, and THEN the Ajax request. Why?
-  // I tried to write a separate function renderFooter that would display the items left, and would be called inside the ajax request in getAndDisplayAllTasks, but that didn't work.
   getAndDisplayAllTasks();
-  console.log('after  getAndDisplayAllTasks(): numberOfTodos: ', numberOfTodos);
-  console.log('after getAndDisplayAllTasks(): numberOfCompletedTodos: ', numberOfCompletedTodos);
-  console.log('after  getAndDisplayAllTasks(): active todos: ', numberOfTodos - numberOfCompletedTodos);
 });
 

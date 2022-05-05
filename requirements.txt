@@ -5,7 +5,7 @@ My unique API key for ATDAPI service:
 
 - [x] You should use jQuery for this project.
 - [x] Set up GitHub repo and push changes to GitHub.
-- [ ] Set up GitHup Page for this project once it is finished.
+- [x] Set up GitHup Page for this project once it is finished.
 
 *Minimum requirements:*
 - [x] A list of tasks rendered in the DOM based on data from the ATDAPI server.
@@ -15,10 +15,11 @@ My unique API key for ATDAPI service:
 *Bonus feature:*
 - [x] A toggle to show Active/Complete/All tasks only
 
-- [ ] App is very slow. Does it have to do with the event listeners being attached to the ul element, instead of the document element?
 
-- [ ] Add README.
+Additional steps:
+- [x] Add README.
 - [ ] Fix accessibility for all event listeners.
+- [ ] Check that GitHub Page is working.
 - [ ] Fix BS cols for xs devices - items and buttons should still be in the same row.
 - [ ] Add background image.
 - [ ] Add project to portfolio.
