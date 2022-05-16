@@ -365,13 +365,13 @@ $(document).ready(function() {
     }
   });
 
-  // Show loading animation when AJAX request starts
+  // Show loading animation when the first Ajax request begins. 
   $(document).ajaxStart(function() {
     $('#loader').show();
   });
 
-  // Fade out loading animation when AJAX request successful
-  $(document).ajaxSuccess(function() {
+  // Fade out loading animation when all Ajax requests have completed
+  $(document).ajaxStop(function() {
     $('#loader').fadeOut();
   });
 
