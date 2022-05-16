@@ -69,3 +69,26 @@ footer {
   padding: 3px;
   border-radius: 3px;
 }
+
+
+/* ========== Loading animation ===== */
+
+#loader {
+  width: 100px;
+  height: 100px;
+  border: 20px solid #EAF0F6;
+  border-radius: 50%;
+  margin: auto;
+  border-top: 20px solid #d9534f;
+  animation: spinner 4s linear infinite;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  
+  100% {
+    transform: rotate(360deg);
+  }
+}

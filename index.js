@@ -365,6 +365,21 @@ $(document).ready(function() {
     }
   });
 
+  // Show loading animation when AJAX request starts
+  $(document).ajaxStart(function() {
+    $('#loader').show();
+  });
+
+  // Fade out loading animation when AJAX request successful
+  $(document).ajaxSuccess(function() {
+    $('#loader').fadeOut();
+  });
+
   getAndDisplayAllTasks();
+});
+
+// Fade out loading animation once window is loaded
+$(window).on('load', function() {
+  $('#loader').fadeOut(400);
 });
 
