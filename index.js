@@ -1,6 +1,9 @@
 // My API key: {success:true,id:340}
-// replaced $(document).ready(function...) with $(window).on('load', function...), as CSS styles were not applied to all DOM elements
+// replaced $(document).ready(function...) with $(window).on('load', function...), as the custom CSS was not applied to some DOM elements. 
 $(window).on('load', function() {
+  // Fade out loading animation once window is loaded
+  $('#loader').fadeOut(400);
+
   var numberOfCompletedTodos = 0;
   var numberOfTodos = 0;
 
@@ -288,8 +291,10 @@ $(window).on('load', function() {
               <div class="col-xs-12">
                 <div class="row show-todo-item">
                   <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-                  <label class="col-xs-9">${element.content}</label>
-                  <button class="destroy col-xs-2">Remove</button>
+                  <label class="col-xs-10">${element.content}</label>
+                  <button class="destroy btn btn-danger">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                  </button>
                 </div>
                 <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
               </div>
@@ -321,8 +326,9 @@ $(window).on('load', function() {
               <div class="col-xs-12">
                 <div class="row show-todo-item">
                   <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-                  <label class="col-xs-9">${element.content}</label>
-                  <button class="destroy btn btn-danger">Remove</button>
+                  <label class="col-xs-10">${element.content}</label>
+                  <button class="destroy btn btn-danger">
+                  <span class="glyphicon glyphicon-remove" aria-hidden="true"></span></button>
                 </div>
                 <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
               </div>
@@ -383,7 +389,7 @@ $(window).on('load', function() {
 });
 
 // Fade out loading animation once window is loaded
-$(window).on('load', function() {
-  $('#loader').fadeOut(400);
-});
+// $(window).on('load', function() {
+//   $('#loader').fadeOut(400);
+// });
 
