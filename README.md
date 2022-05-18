@@ -5,5 +5,5 @@ A simple todo list, using HTML, Bootstrap 3, custom CSS, JavaScript and AJAX, ba
 Try it here: https://julesss-coder.github.io/To-do-list-with-API/
 
 ---
-Credits:
+**Credits:**
 Icon made from Icon Fonts is licensed by CC BY 3.0, URL: http://www.onlinewebfonts.com/icon

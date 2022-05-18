@@ -1,6 +1,6 @@
 // My API key: {success:true,id:340}
-
-$(document).ready(function() {
+// replaced $(document).ready(function...) with $(window).on('load', function...), as CSS styles were not applied to all DOM elements
+$(window).on('load', function() {
   var numberOfCompletedTodos = 0;
   var numberOfTodos = 0;
 
