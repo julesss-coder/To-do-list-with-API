@@ -27,8 +27,10 @@ $(document).ready(function() {
             <div class="col-xs-12">
               <div class="row show-todo-item">
                 <input type="checkbox" class="toggle col-xs-1" data-id="${element.id}" ${(element.completed ? 'checked' : '')}>
-                <label class="col-xs-9">${element.content}</label>
-                <button class="destroy btn btn-danger">Remove</button>
+                <label class="col-xs-10">${element.content}</label>
+                <button class="destroy btn btn-danger">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                </button>
               </div>
               <input type="text" class="edit-todo-item col-xs-offset-1 col-xs-9">
             </div>
@@ -246,6 +248,8 @@ $(document).ready(function() {
       markAsActive(idToToggle)
     }
   });
+
+
 
 
 
