@@ -1,7 +1,6 @@
-//New API URL: https://fewd-todolist-api.onrender.com/
-// {success:true,id:63}
+// New API URL: https://fewd-todolist-api.onrender.com/
+// API key: {success:true,id:63}
 
-// My API key: {success:true,id:340}
 $(window).on('load', function() {
   $('#loader').fadeOut(400);
 
@@ -12,7 +11,7 @@ $(window).on('load', function() {
   var getAndDisplayAllTasks = function() {    
     $.ajax({
       type: 'GET',
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks?api_key=63',
       dataType: 'json',
 
       success: function (response, textStatus) {
@@ -74,7 +73,7 @@ $(window).on('load', function() {
   var addTodo = function() {
     $.ajax({
       type: 'POST', 
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks?api_key=63',
       contentType: 'application/json',
       dataType: 'json', 
       data: JSON.stringify({
@@ -115,7 +114,7 @@ $(window).on('load', function() {
   var removeToDo = function(idToRemove) {
     $.ajax({
       type: 'DELETE',
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + idToRemove + '?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks/' + idToRemove + '?api_key=63',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
       }, 
@@ -137,7 +136,7 @@ $(window).on('load', function() {
   var editTodo = function(editedToDo, idToEdit) {
     $.ajax({
       type: 'PUT',
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks/' + idToEdit + '?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks/' + idToEdit + '?api_key=63',
       contentType: 'application/json',
       dataType: 'json',
       data: JSON.stringify({
@@ -207,7 +206,7 @@ $(window).on('load', function() {
   var markAsCompleted = function(idToToggle) {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_complete?api_key=340`,
+      url: `https://fewd-todolist-api.onrender.com/tasks/${idToToggle}/mark_complete?api_key=63`,
       dataType: 'json',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
@@ -221,7 +220,7 @@ $(window).on('load', function() {
   var markAsActive = function(idToToggle) {
     $.ajax({
       type: 'PUT',
-      url: `https://altcademy-to-do-list-api.herokuapp.com/tasks/${idToToggle}/mark_active?api_key=340`, 
+      url: `https://fewd-todolist-api.onrender.com/tasks/${idToToggle}/mark_active?api_key=63`, 
       dataType: 'json',
       success: function(response, textStatus) {
         getAndDisplayAllTasks();
@@ -269,7 +268,7 @@ $(window).on('load', function() {
   var showCompletedTodos = function() {
     $.ajax({
       type: 'GET',
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks?api_key=63',
       dataType: 'json',
 
       success: function (response, textStatus) {
@@ -303,7 +302,7 @@ $(window).on('load', function() {
   var showActiveTodos = function() {
     $.ajax({
       type: 'GET',
-      url: 'https://altcademy-to-do-list-api.herokuapp.com/tasks?api_key=340',
+      url: 'https://fewd-todolist-api.onrender.com/tasks?api_key=63',
       dataType: 'json',
 
       success: function (response, textStatus) {
