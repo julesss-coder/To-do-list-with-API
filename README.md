@@ -1,6 +1,6 @@
 ### Todo list based on API data
 
-A simple todo list, using HTML, Bootstrap 3, custom CSS, JavaScript and AJAX, based on data from Altcademy's ATDAPI server (URL: https://altcademy-to-do-list-api.herokuapp.com/).
+A simple todo list, using HTML, Bootstrap 3, custom CSS, JavaScript and AJAX, based on data from Altcademy's ATDAPI server (URL: https://fewd-todolist-api.onrender.com/).
 
 Try it here: https://julesss-coder.github.io/To-do-list-with-API/
 
