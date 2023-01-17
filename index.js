@@ -1,7 +1,8 @@
+//New API URL: https://fewd-todolist-api.onrender.com/
+// {success:true,id:63}
+
 // My API key: {success:true,id:340}
-// replaced $(document).ready(function...) with $(window).on('load', function...), as the custom CSS was not applied to some DOM elements. 
 $(window).on('load', function() {
-  // Fade out loading animation once window is loaded
   $('#loader').fadeOut(400);
 
   var numberOfCompletedTodos = 0;
@@ -17,7 +18,6 @@ $(window).on('load', function() {
       success: function (response, textStatus) {
         numberOfTodos = 0;
         numberOfCompletedTodos = 0;
-        // Empty todo list in DOM before displaying updated list of todos
         $('#todo-list').empty();
 
         if (numberOfTodos === 0) {
@@ -39,23 +39,19 @@ $(window).on('load', function() {
             </div>
           </div>`;
 
-          // append it to todo list
           $('#todo-list').append(newToDo); 
           numberOfTodos++;    
 
-          // if todo is completed, increment numberOfCompletedTodos
           if (element.completed === true) {
             numberOfCompletedTodos++;
           }
 
-          // if all todos are completed, toggle-all checkbox should be checked
           if (numberOfTodos === numberOfCompletedTodos) {
             $('#toggle-all').prop('checked', true);
           } else {
             $('#toggle-all').prop('checked', false);
           }
 
-          // Display number of active items in footer 
           var activeTodos = numberOfTodos - numberOfCompletedTodos;
           if (activeTodos > 1 || activeTodos === 0) {
             $('#footer').removeClass('hide-footer');
@@ -87,7 +83,6 @@ $(window).on('load', function() {
         }
       }),
       success: function(response, textStatus) {
-        console.log('response of POST request: ', response);
         getAndDisplayAllTasks();
       },
       error: function(request, textStatus, errorMessage) {
@@ -98,10 +93,8 @@ $(window).on('load', function() {
 
   // Event listener for input field
   $('#new-todo').keyup(function(e) {
-    console.log(e.which);
     if ($('#new-todo').val() !== '') {
       if(e.which === 13) {
-        console.log('addTodo will be called');
         addTodo();
         $('#new-todo').val('');
       }
@@ -182,7 +175,7 @@ $(window).on('load', function() {
   });
 
 
-  // if user clicks outside edit input field or leaves it with tab, display initial todo again
+  // If user clicks outside edit input field or leaves it with tab, display initial todo again:
   $(document).on('focusout', '.edit-todo-item.editing', function() {
     $('.editing').each(function(index, element) {
       $(element).removeClass('editing');
@@ -192,7 +185,6 @@ $(window).on('load', function() {
 
   // Event listener on document, listening for keyup event on edit input field
   $(document).on('keyup', '.edit-todo-item', function(event) {
-    console.log('editkeyup event: ', event);
     var idToEdit = $(event.target).prev().find('input').data('id');
     // if user hits Enter
     if (event.key === "Enter") { 
@@ -201,7 +193,7 @@ $(window).on('load', function() {
         editTodo(editedToDo, idToEdit);
         $(event.target).blur();
       }
-    // if user hits Escape
+    // If user hits Escape:
     } else if (event.key === "Escape") {
       $(event.target).removeClass('editing');
       $(event.target).prev('.show-todo-item').removeClass('editing');
@@ -244,7 +236,6 @@ $(window).on('load', function() {
   // Listen for 'change' events on item checkbox ('change' instead of 'click' event, to make checkbox accessible)
   $(document).on('change', '.toggle', function(event) {
     var idToToggle = $(this).data('id');
-    // Check the current, changed state of checkbox:
     if (this.checked === true) {
       markAsCompleted(idToToggle);
     } else if (this.checked === false) {
@@ -282,7 +273,6 @@ $(window).on('load', function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
-        // Empty todo list in DOM before displaying updated list of todos
         $('#todo-list').empty();
         $(response.tasks).each(function(index, element) {
           if (element.completed === true) {
@@ -317,7 +307,6 @@ $(window).on('load', function() {
       dataType: 'json',
 
       success: function (response, textStatus) {
-        // Empty todo list in DOM before displaying updated list of todos
         $('#todo-list').empty();
         $(response.tasks).each(function(index, element) {
           if (element.completed === false) {
@@ -346,7 +335,6 @@ $(window).on('load', function() {
   
 
   var displayFilteredTodos = function(event) {
-    // Show border around selected filter
     $('#filters a').each(function(index, element) {
       if($(element).hasClass('selected')) {
         $(element).removeClass('selected');
@@ -388,8 +376,5 @@ $(window).on('load', function() {
   getAndDisplayAllTasks();
 });
 
-// Fade out loading animation once window is loaded
-// $(window).on('load', function() {
-//   $('#loader').fadeOut(400);
-// });
+
 
